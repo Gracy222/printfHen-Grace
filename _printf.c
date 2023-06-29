@@ -1,10 +1,9 @@
 #include "main.h"
 #include <unistd.h>
 
-int (*get_print_function(char flag))(va_list);
 
 /**
- * _printf - replica of the printf function
+ * _printf - self made printf function
  * @format: format string
  *
  * Return: number of characters printed
@@ -36,9 +35,9 @@ int _printf(const char *format, ...)
 			print_count++; /* Increment the print count */
 			i++;
 		}
-		else if (get_print_function(format[i + 1]) != NULL)
+		else if (print_function(format[i + 1]) != NULL)
 		{
-			print_count += get_print_function(format[i + 1])(args);
+			print_count += print_function(format[i + 1])(args);
 			/* Call the appropriate print function and update the print count */
 			i++;
 		}
@@ -53,25 +52,32 @@ int _printf(const char *format, ...)
 	return (print_count); /* Return the total num of characters printed */
 }
 
+
 /**
- * get_print_function - auxiliary func to retrieve the appropriate print func
- * @flag: format specifier
+ * print_function - a function that collects the specific print function
+ * @fmt: Argument - act as a format specifier
  *
- * Return: pointer to the print function or NULL
+ * Return: point
  */
-int (*get_print_function(char flag))(va_list)
+
+
+int (*print_function(char fmt))(va_list)
 {
-	printer_t arr[] = {
+	linker_p arr[] = {
 		{'c', print_char},
 		{'s', print_string},
 		{'i', print_integer},
+		{'d', print_integer},
+		{'\0', NULL}
 	};
-	int i;
+	int index;
 
-	for (i = 0; arr[i].flag != '\0'; i++)
+	for (index = 0; arr[index].fmt != '\0'; index++)
 	{
-		if (flag == arr[i].flag)
+		if (fmt == arr[index].fmt)
+		{
 			break;
+		}
 	}
-	return (arr[i].function); /* Return the appropriate print function */
+	return (arr[index].f); /* Return the appropriate print function */
 }

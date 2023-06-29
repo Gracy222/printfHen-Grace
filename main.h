@@ -1,7 +1,7 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
-/** C library functions used **/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -14,18 +14,19 @@ int print_char(va_list args);
 int print_string(va_list args);
 int print_integer(va_list args);
 
-/** STRUCTURE **/
+int (*print_function(char fmt))(va_list);
+
 
 /**
- * struct printer - conects format specifier with its corresponding function.
- * @flag: format specifier.
- * @function: pointer to @flag especific function.
+ * struct linker - links format specifiers to functions
+ * @fmt: format specifiers
+ * @f: function pointer
  */
 
-typedef struct printer
+typedef struct linker
 {
-	char flag;
-	int (*function)(va_list);
-} printer_t;
+	char fmt;
+	int (*f)(va_list);
+} linker_p;
 
 #endif /* _MAIN_H_ */
